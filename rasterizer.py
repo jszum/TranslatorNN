@@ -2,33 +2,50 @@
 import Image
 import sys
 
-def binarize(png):
-	xsize = png.size[0]
-	ysize = png.size[1]
-	array = []
-	for y in range(ysize):
-		for x in range (xsize):
+class Raster:
+
+	def __init__(self):
+		self.filename = ''
+		self.image = ''
+		self.xsize = 0
+		self.ysize = 0
+		self.array = []
+
+	def openImage(self, file):
+		self.filename = file
+		self.image = Image.open(file)
+		self.xsize = self.image.size[0]
+		self.ysize = self.image.size[1]
+
+	def binarize(self):
 		
-			if png.getpixel((x,y)) == (255,255,255):
-				array.append(0)
-			else:
-				array.append(1)
+		for y in range(self.ysize):
+			for x in range(self.xsize):
+				if self.image.getpixel((x,y)) == (255,255,255):
+					self.array.append(0)
+				else:
+					self.array.append(1)
 
-	return array
+	def getArray(self):
+		
+		return self.array
 
-def show(array, x, y):
-	for i in range(x):
-		print binary[i*y:i*y+y]
+
+	def show(self):
+
+		for i in range(self.xsize):
+			print self.array[i*self.ysize:(i+1)*self.ysize]
 
 	
-print sys.argv[1]
-png = Image.open(sys.argv[1])
-xsize = png.size[0]
-ysize = png.size[1]
+if __name__ == "__main__":
 
-binary = binarize(png)
-show(binary, xsize, ysize)
-#sys.stdout.write(str(binary))
+	png = sys.argv[1]
+	raster = Raster()
+
+	raster.openImage(png)
+	raster.binarize()
+	raster.show()
+
 
 
 
