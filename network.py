@@ -33,12 +33,12 @@ class MyNet:
 		self.net.sortModules()
 
 	
-	def saveToFile(self):
-		NetworkWriter.writeToFile(self.net, 'config.xml')
+	def saveToFile(self,file='config.xml'):
+		NetworkWriter.writeToFile(self.net, file)
 
 
-	def loadFromFile(self):
-		self.net = NetworkReader.readFrom('config.xml')
+	def loadFromFile(self, file='config.xml'):
+		self.net = NetworkReader.readFrom(file)
 
 
 if __name__ == "__main__":
