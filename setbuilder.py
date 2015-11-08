@@ -30,25 +30,18 @@ def getImages(folder):
 def saveCsv(dlist, name):
 
 	csvfile = open(name, 'w+')
-	
 
 	data = '\n'.join(str(e) for e in dlist)
 
 	csvfile.write(data)
-
 	csvfile.close() 
 
-if __name__=="__main__":
-
-	directory = os.path.abspath(sys.argv[1])
-	dname = os.path.basename(directory)
-
-
-	images = getImages(directory)
-	
-	raster = rasterizer.Raster()
- 
+def buildSet(images):
 	records = []
+	raster = rasterizer.Raster()
+
+	images = sorted(images)	
+	print images
 
 	for image in images:
 		raster.openImage(directory+"/"+image)
@@ -61,4 +54,14 @@ if __name__=="__main__":
 
 		records.append(str(record))
 
-	saveCsv(records, dname)
+	return records
+
+if __name__=="__main__":
+
+	directory = os.path.abspath(sys.argv[1])
+	dirname = os.path.basename(directory)
+	images = getImages(directory)
+	
+	records = buildSet(images)
+
+	saveCsv(records, "datasets/"+dirname)
