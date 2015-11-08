@@ -18,7 +18,7 @@ class Raster:
 		self.ysize = self.image.size[1]
 
 	def binarize(self):
-		
+		self.array = []
 		for y in range(self.ysize):
 			for x in range(self.xsize):
 				if self.image.getpixel((x,y)) == (255,255,255):
