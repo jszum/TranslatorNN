@@ -26,7 +26,7 @@ class Raster:
 				else:
 					self.array.append(1)
 
-	def getArray(self):
+	def get(self):
 		
 		return self.array
 
