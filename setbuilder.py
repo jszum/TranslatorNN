@@ -3,7 +3,6 @@
 import rasterizer
 import sys
 import os
-import csv
 
 morse_codes = {
 	"b":[1,0,0,0],
@@ -29,20 +28,26 @@ def getImages(folder):
 	return imag
 
 def saveCsv(dlist, name):
-	csvfile = open(name, 'w')
-	fd = csv.writer(csvfile, quoting=csv.QUOTE_ALL)
-	fd.writerow(dlist)
+
+	csvfile = open(name, 'w+')
+	
+
+	data = '\n'.join(str(e) for e in dlist)
+
+	csvfile.write(data)
+
+	csvfile.close() 
 
 if __name__=="__main__":
 
 	directory = os.path.abspath(sys.argv[1])
-	dname = os.path.basename(directory )
+	dname = os.path.basename(directory)
 
 
 	images = getImages(directory)
 	
 	raster = rasterizer.Raster()
-
+ 
 	records = []
 
 	for image in images:
@@ -50,11 +55,10 @@ if __name__=="__main__":
 		raster.binarize()
 		arr = raster.get()
 
-		data = ','.join(str(x) for x in arr);
+		data = ','.join(str(x) for x in arr)
 		response = morse_codes[image[:-4]]
-		record = data #+ response
+		record = data + ','+ ','.join(str(e) for e in response)
 
-		records.append(record)
-	print morse_codes["z"]
+		records.append(str(record))
 
 	saveCsv(records, dname)
