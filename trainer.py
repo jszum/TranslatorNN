@@ -56,7 +56,7 @@ if __name__=="__main__":
 
 	
 	t = BackpropTrainer(netw.net,ds,learningrate=0.01,momentum=0.5,verbose=True)
-	t.trainUntilConvergence()
+	t.trainEpochs(epochs=100000)
 
 	netw.saveToFile(net_file)
 

@@ -8,16 +8,18 @@ import sys
 if __name__=="__main__":
 
 	image = sys.argv[1]
+	net_file = sys.argv[2]
+
 	raster = rasterizer.Raster()
 
 	raster.openImage(image)
 	raster.binarize()
-	raster.show()
+	data = raster.get()
 
-	network = network.MyNet()
-	network.constructNet(144,10,4)
-	network.setup()
+	netw = network.MyNet()
+	netw.loadFromFile(net_file)
+	result = netw.net.activate(data)
 
-	network.saveToFile()
+	print result
 
 
