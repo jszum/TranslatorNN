@@ -2,6 +2,7 @@
 import Image
 import sys
 
+
 class Raster:
 
 	def __init__(self):
@@ -13,18 +14,23 @@ class Raster:
 
 	def openImage(self, file):
 		self.filename = file
-		self.image = Image.open(file)
+		self.image = Image.open(file).convert('L')
 		self.xsize = self.image.size[0]
 		self.ysize = self.image.size[1]
+
+	def showimage(self):
+		print self.image.getpixel((1,2))
 
 	def binarize(self):
 		self.array = []
 		for y in range(self.ysize):
 			for x in range(self.xsize):
-				if self.image.getpixel((x,y)) == (255,255,255):
-					self.array.append(0)
-				else:
+				gray_value = self.image.getpixel((x,y))	
+
+				if(gray_value < 150):			
 					self.array.append(1)
+				else:
+					self.array.append(0)
 
 	def get(self):
 		
@@ -43,6 +49,7 @@ if __name__ == "__main__":
 	raster = Raster()
 
 	raster.openImage(png)
+
 	raster.binarize()
 	raster.show()
 
