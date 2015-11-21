@@ -3,10 +3,11 @@
 import rasterizer
 import network
 import sys
-
+import numpy as np
 
 if __name__=="__main__":
 
+	np.set_printoptions(precision=2, suppress=True)
 	image = sys.argv[1]
 	net_file = sys.argv[2]
 
