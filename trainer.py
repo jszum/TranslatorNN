@@ -37,6 +37,7 @@ if __name__=="__main__":
 
 	data_file = ''
 	net_file = ''
+	epochs = 1
 
 
 
@@ -44,18 +45,20 @@ if __name__=="__main__":
 	ds = ClassificationDataSet(in_neurons,out_neurons)
 	
 
-	if len(sys.argv)==2:
+	if len(sys.argv)==3:
 		data_file = sys.argv[1]
 		loadSet(ds, data_file)
 		netw.constructNet(ds.indim,hid_neurons,ds.outdim)
 		netw.setup()
 		net_file = 'train.xml'
+		epch = int(sys.argv[2])
 		print "Opt1"
 		
 
-	if len(sys.argv)==3:
+	if len(sys.argv)==4:
 		data_file = sys.argv[1]
-		net_file = sys.argv[2]
+		net_file = sys.argv[3]
+		epch = int(sys.argv[2])
 		netw.loadFromFile(net_file)
 		loadSet(ds, data_file)
 		print "Opt2"
@@ -63,8 +66,7 @@ if __name__=="__main__":
 	
 	t = BackpropTrainer(netw.net,ds,learningrate=0.01,momentum=0.5,verbose=True)
 
-	for i in range(10):	
-		t.trainEpochs(epochs=1000)
+	t.trainEpochs(epochs=epch)
 
 	netw.saveToFile(net_file)
 
