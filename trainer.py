@@ -5,6 +5,10 @@ import sys
 from pybrain.datasets import ClassificationDataSet
 from pybrain.supervised.trainers import BackpropTrainer
 
+in_neurons = 900
+hid_neurons = 60
+out_neurons = 4
+
 def loadSet(dataset, filename):
 	f = open(filename, 'r')
 
@@ -12,8 +16,8 @@ def loadSet(dataset, filename):
 
 	for line in f.readlines():
 		data = [float(x) for x in line.strip().split(',') if x != '']
-		indata =  tuple(data[:144])
-		outdata = tuple(data[144:])
+		indata =  tuple(data[:in_neurons])
+		outdata = tuple(data[in_neurons:])
 		
 		dataset.addSample(indata, outdata)
 		counter = counter +1
@@ -34,14 +38,16 @@ if __name__=="__main__":
 	data_file = ''
 	net_file = ''
 
+
+
 	netw = network.MyNet()
-	ds = ClassificationDataSet(144,4)
+	ds = ClassificationDataSet(in_neurons,out_neurons)
 	
 
 	if len(sys.argv)==2:
 		data_file = sys.argv[1]
 		loadSet(ds, data_file)
-		netw.constructNet(ds.indim,10,ds.outdim)
+		netw.constructNet(ds.indim,hid_neurons,ds.outdim)
 		netw.setup()
 		net_file = 'train.xml'
 		print "Opt1"
