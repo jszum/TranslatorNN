@@ -5,6 +5,8 @@ import network
 import sys
 import numpy as np
 
+DEBUG = False
+
 morse_codes = {
 	"1000":"b",
 	"1010":"c",
@@ -32,22 +34,24 @@ def normalize(res):
 	return normalized
 
 def clasify(n):
-	print n
+	log(n)
 	string = ""
 	for e in n:
 		string += str(e)
 
 	try:
-		print "qualified as letter: " + morse_codes[string]
+		log("qualified as letter: " + morse_codes[string])
+		return morse_codes[string]+".png"
 	except KeyError, e:
-		print "Character not recognized"
+		log("Character not recognized")
+		return ""
 
+def log(s):
+	if DEBUG:
+		print s
 
-if __name__=="__main__":
-
+def main(image, net_file):
 	np.set_printoptions(precision=2, suppress=True)
-	image = sys.argv[1]
-	net_file = sys.argv[2]
 
 	raster = rasterizer.Raster()
 
@@ -61,10 +65,22 @@ if __name__=="__main__":
 
 	normalized = normalize(result)
 
+	answer = ''
+
 	if len(normalized) == 4:
-		print result
-		clasify(normalized)
+		log(result)
+		answer = clasify(normalized)
 	
 	else:
-		print "Answer not recognized"
+		log("Answer not recognized")
+		answer = ""
+
+	return answer
+
+if __name__=="__main__":
+
+	img = sys.argv[1]
+	net = sys.argv[2]
+	answer = main(img, net)
+	sys.exit(answer)
 
