@@ -1,0 +1,13 @@
+B recognized 36.25
+C recognized 30.0
+F recognized 35.0
+H recognized 36.25
+J recognized 35.0
+L recognized 33.75
+P recognized 40.0
+Q recognized 37.5
+V recognized 37.5
+X recognized 45.0
+Y recognized 35.0
+Z recognized 30.0
+
