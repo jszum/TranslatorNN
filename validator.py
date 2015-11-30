@@ -65,6 +65,7 @@ def count(array):
 	
 
 def stats():
+
 	print "B recognized " + str(sum(ba)/float(len(ba))*100)
 	print "C recognized " + str(sum(ca)/float(len(ca))*100)
 	print "F recognized " + str(sum(fa)/float(len(fa))*100)
@@ -92,7 +93,7 @@ if __name__=="__main__":
 				expected =  os.path.basename(path)
 				answer = system.main(filepath, net)
 		
-				verify(answer, expected)
+				verify(expected, answer)
 
 	stats()
 
