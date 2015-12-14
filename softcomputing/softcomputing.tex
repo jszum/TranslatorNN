@@ -8,6 +8,54 @@
 \usepackage[utf8]{inputenc} 
 \setlength\parindent{24pt}
 
+%tlmgr init-usertree
+%sudo apt-get install xzdec
+%sudo tlmgr install collection-fontsrecommended
+
+
+
+% Default fixed font does not support bold face
+\DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{12} % for bold
+\DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{12}  % for normal
+
+% Custom colors
+\usepackage{color}
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+
+\usepackage{listings}
+
+% Python style for highlighting
+\newcommand\pythonstyle{\lstset{
+language=Python,
+basicstyle=\ttm,
+otherkeywords={self},             % Add keywords here
+keywordstyle=\ttb\color{deepblue},
+emph={MyClass,__init__},          % Custom highlighting
+emphstyle=\ttb\color{deepred},    % Custom highlighting style
+stringstyle=\color{deepgreen},
+frame=tb,                         % Any extra options here
+showstringspaces=false            % 
+}}
+
+
+% Python environment
+\lstnewenvironment{python}[1][]
+{
+\pythonstyle
+\lstset{#1}
+}
+{}
+
+% Python for external files
+\newcommand\pythonexternal[2][]{{
+\pythonstyle
+\lstinputlisting[#1]{#2}}}
+
+% Python for inline
+\newcommand\pythoninline[1]{{\pythonstyle\lstinline!#1!}}
+
 \renewcommand\lstlistlistingname{List of code listings}
 \newcommand{\linia}{\rule{\linewidth}{0.4mm}}
 \author{jszum}
@@ -27,7 +75,7 @@ Recognition will be performed by using Multilayer Perceptron - form of neural ne
 \\\\
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.5\linewidth]{./morse}
+%\includegraphics[width=0.5\linewidth]{./morse}
 \caption{Standard for coding characters in Morse code.}
 \label{fig:morse}
 \end{figure}
@@ -56,7 +104,7 @@ The number of neurons is fixed according to often used formula:\\ $hidden_neuron
 For teaching purposes there was prepared eight sets of four-sign characters. Different fonts were chosen in order to keep variety of characters (picture \ref{fig:alphabet}).
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.7\linewidth]{./alphabet}
+%\includegraphics[width=0.7\linewidth]{./alphabet}
 \caption{Prepared characters. Version without noise or other distortions.}
 \label{fig:alphabet}
 \end{figure}
@@ -67,19 +115,68 @@ The neural network was trained using following parameters:
 \begin{itemize}
 \item learning rate = 0.01, establishes how fast the weight changes during training process.
 \item momentum = 0.5, used for preventing network from converging to local minimum.
-\item backpropagation as a teaching algorithm.
+\item back-propagation as a teaching algorithm.
 \end{itemize}
-
-
 
 Beside presented above "clean" sets, there are also prepared "noisy" ones. To be more precise - using written for that purpose Python's  script, the pictures with some percentage of noise were generated as well as ones with some blank lines (number of lines also can be passed as an argument).
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.3\linewidth]{./c}
+%\includegraphics[width=0.3\linewidth]{./c}
 \caption{Examples of broken images.}
 \label{fig:c}
 \end{figure}
+
+\newpage
+\section{Implementation}
+Core script for creating structure and proper set-up of designed network:
+\\
+\begin{python}
+#!/usr/bin/python
+
+from pybrain.structure import FeedForwardNetwork
+from pybrain.structure import FullConnection
+from pybrain.structure import LinearLayer, SigmoidLayer, TanhLayer
+from pybrain.tools.xml.networkwriter import NetworkWriter
+from pybrain.tools.xml.networkreader import NetworkReader
+
+class MyNet:
+
+	def __init__(self, file='config.xml'):
+		self.net = FeedForwardNetwork()
+		self.file = file
+
+	def constructNet(self, input, hidden, output): 
+		inputLayer = LinearLayer(input)
+		hiddenLayer = TanhLayer(hidden)
+		outputLayer = LinearLayer(output)
+
+		self.net.addInputModule(inputLayer)
+		self.net.addModule(hiddenLayer)
+		self.net.addOutputModule(outputLayer)
+
+		conn1 = FullConnection(inputLayer, hiddenLayer)
+		conn2 = FullConnection(hiddenLayer, outputLayer)
+
+		self.net.addConnection(conn1)
+		self.net.addConnection(conn2)
+
+	def setup(self):
+		self.net.sortModules()
+	
+	def saveToFile(self,file='config.xml'):
+		NetworkWriter.writeToFile(self.net, file)
+
+	def loadFromFile(self, file='config.xml'):
+		self.net = NetworkReader.readFrom(file)
+
+if __name__ == "__main__":
+	network = MyNet()
+	network.constructNet(900,60,4)
+	network.setup()
+
+	network.saveToFile()
+\end{python}
 
 \chapter{Tests}
 \chapter{Conclusions}
