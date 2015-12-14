@@ -50,25 +50,26 @@ if __name__=="__main__":
 		loadSet(ds, data_file)
 		netw.constructNet(ds.indim,hid_neurons,ds.outdim)
 		netw.setup()
-		net_file = 'train.xml'
+		net_file = 'tanh.xml'
 		epch = int(sys.argv[2])
 		print "Opt1"
 		
 
 	if len(sys.argv)==4:
 		data_file = sys.argv[1]
-		net_file = sys.argv[3]
 		epch = int(sys.argv[2])
+		net_file = sys.argv[3]
 		netw.loadFromFile(net_file)
 		loadSet(ds, data_file)
 		print "Opt2"
 
 	
-	t = BackpropTrainer(netw.net,ds,learningrate=0.01,momentum=0.5,verbose=True)
+	t = BackpropTrainer(netw.net,ds,learningrate=0.01,momentum=0.2,verbose=True)
 
-	t.trainEpochs(epochs=epch)
-
-	netw.saveToFile(net_file)
+	for i in range(epch/1000):
+		t.trainEpochs(epochs=1000)
+		netw.saveToFile(net_file)
+		print "Round "+str(i)
 
 
 
