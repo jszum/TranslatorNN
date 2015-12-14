@@ -1,0 +1,86 @@
+\documentclass[eng,openany]{mgr}
+\usepackage{listings}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{tabularx,colortbl} 
+\usepackage{rotating}
+\usepackage[utf8]{inputenc} 
+\setlength\parindent{24pt}
+
+\renewcommand\lstlistlistingname{List of code listings}
+\newcommand{\linia}{\rule{\linewidth}{0.4mm}}
+\author{jszum}
+\title{Translation system based on Multilayer Perceptron: pictures of characters into a Morse alphabet signs.}
+\engtitle{}
+\supervisor{dr inż. Jacek Mazurkiewicz}
+\field{Computer Science}
+\specialisation{Internet Enginering}
+\date{14.12.2015}
+\begin{document}
+\maketitle
+\tableofcontents
+\chapter{Problem description}
+
+Main task is to implement a system to recognize a pictures of characters (assumed that they will be computer's fonts) and then translate them into a Morse codes using some kind of dictionary.\\
+Recognition will be performed by using Multilayer Perceptron - form of neural network that besides input and output layer has also one or more hidden layers. Their task is to improve the computations and make entire network more sensitive.
+\\\\
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\linewidth]{./morse}
+\caption{Standard for coding characters in Morse code.}
+\label{fig:morse}
+\end{figure}
+\\
+As th figure \ref{fig:morse} presents, the Morse Code is an alphabet with non-fixed word length. Multilayer perceptron should have the fixed number of input neurons. Due to that fact only the characters coded with word of length four were chosen to perform experiments.
+\chapter{Solution}
+\section{Tools to be used}
+For purpose of implementation \textbf{Python} was chosen. It is scripting, high-level language with many scientific libraries. And as a plus it was primarly designed to work with UNIX-like systems.\\
+Following libraries were used to realise the project:
+\begin{itemize}
+\item PyBrain - it is a Machine Learning Library for Python. Its modules contain a number of algorithms for neural network and machine learning purposes. In following project it was used to build a neural network and perform supervised learning.
+\item Pillow - is still being developed fork of PIL (Python Image Library that is no longer supported). It is similar to Matlab Image Processing Toolbox.\\
+Used mainly for reading images and preprocessing purposes for input of neural network.
+\end{itemize}
+\section{Network design}
+The neural network build to realise characters recognition has following structure:
+\begin{itemize}
+\item 900 neurons in input layer - the number of neurons is a results of using pictures of size 30x30 pixels. Each neuron corresponds to particular pixel.
+\item 60 neurons in hidden layer - that layer exists to improve computations and perform transformation inputs to outputs. Hidden layer uses also activation function. e.g. sigmoid or hyperbolic tangent.
+The number of neurons is fixed according to often used formula:\\ $hidden_neurons = \sqrt{in\_neurons * out\_neurons}$.
+\item 4 neurons in output layer - four signs Morse code characters were chosen, so at the output there is a need to establish four elements.
+\end{itemize}
+\newpage
+\section{Datasets and network training}
+
+For teaching purposes there was prepared eight sets of four-sign characters. Different fonts were chosen in order to keep variety of characters (picture \ref{fig:alphabet}).
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.7\linewidth]{./alphabet}
+\caption{Prepared characters. Version without noise or other distortions.}
+\label{fig:alphabet}
+\end{figure}
+Presented above letters were translated into datasets in \textit{CSV} format. A long vector of zeros and ones (representing white or black, also according to some threshold) was concatenated to correct output. That kind of file was used to train the network.
+\\
+\\
+The neural network was trained using following parameters:
+\begin{itemize}
+\item learning rate = 0.01, establishes how fast the weight changes during training process.
+\item momentum = 0.5, used for preventing network from converging to local minimum.
+\item backpropagation as a teaching algorithm.
+\end{itemize}
+
+
+
+Beside presented above "clean" sets, there are also prepared "noisy" ones. To be more precise - using written for that purpose Python's  script, the pictures with some percentage of noise were generated as well as ones with some blank lines (number of lines also can be passed as an argument).
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.3\linewidth]{./c}
+\caption{Examples of broken images.}
+\label{fig:c}
+\end{figure}
+
+\chapter{Tests}
+\chapter{Conclusions}
+\end{document}
