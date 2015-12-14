@@ -83,9 +83,9 @@ def stats():
 if __name__=="__main__":
 
 
-	net = "config/extended.xml"
+	net = sys.argv[1]
 
-	for (dir, _, files) in os.walk(sys.argv[1]):
+	for (dir, _, files) in os.walk(sys.argv[2]):
 		for f in files:
 			if f.endswith(".png"):
 				path = os.path.join(dir,f)
