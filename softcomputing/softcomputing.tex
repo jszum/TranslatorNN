@@ -75,7 +75,7 @@ Recognition will be performed by using Multilayer Perceptron - form of neural ne
 \\\\
 \begin{figure}[h]
 \centering
-%\includegraphics[width=0.5\linewidth]{./morse}
+\includegraphics[width=0.5\linewidth]{./morse}
 \caption{Standard for coding characters in Morse code.}
 \label{fig:morse}
 \end{figure}
@@ -104,7 +104,7 @@ The number of neurons is fixed according to often used formula:\\ $hidden_neuron
 For teaching purposes there was prepared eight sets of four-sign characters. Different fonts were chosen in order to keep variety of characters (picture \ref{fig:alphabet}).
 \begin{figure}[h]
 \centering
-%\includegraphics[width=0.7\linewidth]{./alphabet}
+\includegraphics[width=0.7\linewidth]{./alphabet}
 \caption{Prepared characters. Version without noise or other distortions.}
 \label{fig:alphabet}
 \end{figure}
@@ -117,16 +117,13 @@ The neural network was trained using following parameters:
 \item momentum = 0.5, used for preventing network from converging to local minimum.
 \item back-propagation as a teaching algorithm.
 \end{itemize}
-
 Beside presented above "clean" sets, there are also prepared "noisy" ones. To be more precise - using written for that purpose Python's  script, the pictures with some percentage of noise were generated as well as ones with some blank lines (number of lines also can be passed as an argument).
-
 \begin{figure}[h]
 \centering
-%\includegraphics[width=0.3\linewidth]{./c}
+\includegraphics[width=0.3\linewidth]{./c}
 \caption{Examples of broken images.}
 \label{fig:c}
 \end{figure}
-
 \newpage
 \section{Implementation}
 Core script for creating structure and proper set-up of designed network:
@@ -177,6 +174,14 @@ if __name__ == "__main__":
 
 	network.saveToFile()
 \end{python}
+Beside presented core program, there were also written following scripts:
+\begin{itemize}
+\item train.py - network trainer, that using backpropagation algorithm performed teaching process with given parameters and storing results in xml file,
+\item liner.py - performs blanking lines in pictures,
+\item noiser.py - adds noise to picture - with some probability the pixel can be randomly set between white and black.
+\item setbuilder.py - transforms images in given folder (recursively) into a CSV file,
+\item validator.py - perfomes image translation into Morse code and validates the result. A set of images can be given. At the end the statistics of successful operations will be displayed.
+\end{itemize}
 
 \chapter{Tests}
 \chapter{Conclusions}
