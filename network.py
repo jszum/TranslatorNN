@@ -2,7 +2,7 @@
 
 from pybrain.structure import FeedForwardNetwork
 from pybrain.structure import FullConnection
-from pybrain.structure import LinearLayer, SigmoidLayer
+from pybrain.structure import LinearLayer, SigmoidLayer, TanhLayer
 from pybrain.tools.xml.networkwriter import NetworkWriter
 from pybrain.tools.xml.networkreader import NetworkReader
 
@@ -15,7 +15,7 @@ class MyNet:
 
 	def constructNet(self, input, hidden, output): 
 		inputLayer = LinearLayer(input)
-		hiddenLayer = SigmoidLayer(hidden)
+		hiddenLayer = TanhLayer(hidden)
 		outputLayer = LinearLayer(output)
 
 		self.net.addInputModule(inputLayer)
