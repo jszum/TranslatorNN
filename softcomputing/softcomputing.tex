@@ -7,6 +7,7 @@
 \usepackage{rotating}
 \usepackage[utf8]{inputenc} 
 \setlength\parindent{24pt}
+\usepackage{float}
 
 %tlmgr init-usertree
 %sudo apt-get install xzdec
@@ -58,7 +59,7 @@ showstringspaces=false            %
 
 \renewcommand\lstlistlistingname{List of code listings}
 \newcommand{\linia}{\rule{\linewidth}{0.4mm}}
-\author{jszum}
+\author{Jarosław Szumega 196018}
 \title{Translation system based on Multilayer Perceptron: pictures of characters into a Morse alphabet signs.}
 \engtitle{}
 \supervisor{dr inż. Jacek Mazurkiewicz}
@@ -80,11 +81,11 @@ Recognition will be performed by using Multilayer Perceptron - form of neural ne
 \label{fig:morse}
 \end{figure}
 \\
-As th figure \ref{fig:morse} presents, the Morse Code is an alphabet with non-fixed word length. Multilayer perceptron should have the fixed number of input neurons. Due to that fact only the characters coded with word of length four were chosen to perform experiments.
+As the figure \ref{fig:morse} presents, the Morse Code is an alphabet with non-fixed word length. Multilayer perceptron should have the fixed number of input neurons. Due to that fact only the characters coded with word of length four were chosen to perform experiments.
 \chapter{Solution}
 \section{Tools to be used}
-For purpose of implementation \textbf{Python} was chosen. It is scripting, high-level language with many scientific libraries. And as a plus it was primarly designed to work with UNIX-like systems.\\
-Following libraries were used to realise the project:
+For purpose of implementation \textbf{Python} was chosen. It is scripting, high-level language with many scientific libraries. And as a plus it was primely designed to work with UNIX-like systems.\\
+Following libraries were used to realize the project:
 \begin{itemize}
 \item PyBrain - it is a Machine Learning Library for Python. Its modules contain a number of algorithms for neural network and machine learning purposes. In following project it was used to build a neural network and perform supervised learning.
 \item Pillow - is still being developed fork of PIL (Python Image Library that is no longer supported). It is similar to Matlab Image Processing Toolbox.\\
@@ -180,9 +181,170 @@ Beside presented core program, there were also written following scripts:
 \item liner.py - performs blanking lines in pictures,
 \item noiser.py - adds noise to picture - with some probability the pixel can be randomly set between white and black.
 \item setbuilder.py - transforms images in given folder (recursively) into a CSV file,
-\item validator.py - perfomes image translation into Morse code and validates the result. A set of images can be given. At the end the statistics of successful operations will be displayed.
+\item validator.py - perfumes image translation into Morse code and validates the result. A set of images can be given. At the end the statistics of successful operations will be displayed.
 \end{itemize}
 
 \chapter{Tests}
+Network is build and trained. The learned datasets are well recognized (100\% in any case).\\
+The tests were executed using noisy images. But the clue is to compare results between them.
+In order to do that, two versions of neural network were prepared: one uses sigmoid as an activation function in hidden layer, the other one - hyperbolic tangent.\\
+\\
+Presented here results will establish which one is better in case of presented project.\\
+
+
+\section{Images with noise}
+The most common distortion is white noise. To check network beahaviour, the pictures with some noisiness were generated. Then using validator, the tests were performed and statistics gathered
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.7\linewidth]{../szum/szum1}
+\caption{Experiment - build dataset with noise = 0.01}
+\label{fig:szum1}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{../szum/szum2}
+\caption{Experiment - build dataset with noise = 0.02}
+\label{fig:szum2}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{../szum/szum5}
+\caption{Experiment - build dataset with noise = 0.05}
+\label{fig:szum3}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{../szum/szum10}
+\caption{Experiment - build dataset with noise = 0.10}
+\label{fig:szum4}
+\end{figure}
+\noindent
+\textbf{Results}\\
+As the picture presents, in most cases the hyperbolic tangent is better. When sigmoid cannot recognize the letters, the hyperbolic tangent still is doing correctly.
+\\
+\\
+The first letter that is not recognized is 'V'.
+\section{Images with missing lines}
+That kind of distortion can be noticed e.g. using printer. Some lines can be not covered and we receive white lines. Will the network be able to recognize such a thing?
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{../szum/linie1}
+\caption{One blank line}
+\label{fig:linie1}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{../szum/linie2}
+\caption{Two blank lines}
+\label{fig:linie2}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{../szum/linie3}
+\caption{Three lines that interrupts recognition.}
+\label{fig:linie3}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{../szum/linie4}
+\caption{Four lines - algorithm overloading.}
+\label{fig:linie4}
+\end{figure}
+\noindent
+\textbf{Results}\\
+\\
+As in the previous test - also here the tangent gets proper results more often, but still there are letters when the sygmoid is simply better.\\
+Tangent can recognize most of weakly-noised images.
+
+\chapter{Extras}
+Beside implementing neural network and performing tests, also the visual effect can be shown.\\
+\\
+Using Raspberry Pi \ref, there was implemented simple script that takes Morse codes as parameter and using LED transmitts light signals.
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.7\linewidth]{./zdj}
+\caption{Raspberry PI model B+.}
+\label{fig:zdj}
+\end{figure}
+
+\begin{python}
+
+#!/usr/bin/python
+import RPi.GPIO as GPIO
+import time
+import sys
+
+PIN = 7
+dot_length = 0.3
+dash_length = dot_length*3
+pause = dot_length
+
+def blink(timer):
+	
+	GPIO.output(PIN, True) 
+	time.sleep(timer)
+	GPIO.output(PIN, False) 
+	time.sleep(pause)
+
+def dot():
+	print 'dot'
+	blink(dot_length)
+	
+def dash():
+	print 'dash'
+	blink(dash_length)
+	
+def control(arr):
+	for e in arr:
+		if e == '0':
+			dot()
+		if e == '1':
+			dash()
+
+def setup():
+	GPIO.setmode(GPIO.BOARD)
+	GPIO.setup(PIN, GPIO.OUT)	
+	GPIO.setwarnings(False)
+
+def process():
+	list = [sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4]]
+	return list	
+	
+def main():
+	
+	setup()	
+	if len(sys.argv)==5:
+		code = process()
+		control(code)
+
+main()
+
+\end{python}
+It can be connected to neural network (e.g. using tcp messages in ZMQ protocol).\\
+That way, there was obtained practical system that not only recognizes the characters, but after translating them into Morse codes, it can also send visual signals.
 \chapter{Conclusions}
+Despite well-known structure of neural network type, solutions has to be independently decided.\\Even small things such as hidden layer activation function can has a huge impact on results.
+\\
+\\
+In presented translation system had better results using hyperbolic tangent. And it was not so well trained as sygmoid, but still achieved better.
+\\
+Training can last long in order to achieve proper results (the longest round of 10 000 epochs took almost 8 hours).
+\\
+The neural network can be applied in simple projects. The example can be presented here Morse transmitter based on RPi. It does not require much work, but shows practical approach and possibility of application.
+\\
+\\
+\textbf{Final remarks}\\\\
+To build working network and achieve good results the tests should be done. They can help to establish if activation function is properly set or not.
+\\
+Time should also be given to train the network. It is process that will determine the error of network, so it is worth to spend some time on it.
+
+\begin{thebibliography}{\bibliography{}}
+\bibitem SSoftcomputing course slides, Jacek Mazurkiewicz
+\bibitem ppyBrain documentation and tutorial, CogBotLab \& Idsia
+\bibitem AArtificial Neural Networks, Wikibooks
+\bibitem PPILLOW - fork od Python Imaging Library documentation.
+\end{thebibliography}
 \end{document}
